@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 const Navbar = () => (
   <React.Fragment>
-    <Link to="/sticky-ui">Home</Link>
+    <Link to="/">Home</Link>
   </React.Fragment>
 )
 
