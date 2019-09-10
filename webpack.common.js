@@ -15,7 +15,10 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['react', 'es2015'],
+            presets: ['@babel/react', {
+              'plugins': ['@babel/plugin-proposal-class-properties']
+            }],
+            
             cacheDirectory: true,
           }
         },
@@ -38,6 +41,9 @@ module.exports = {
   },
   resolve: {
     extensions: ['.js', '.jsx', '.scss', '.css'],
+    alias: {
+      src: path.resolve(__dirname, 'src/')
+    },
     modules: [path.resolve(__dirname, "src"), "node_modules"]
   },
   performance: {

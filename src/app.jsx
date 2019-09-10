@@ -1,13 +1,16 @@
 import React from 'react'
-import { Route } from 'react-router-dom'
-import NavBar from 'Components/NavBar'
-import Welcome from 'Components/Welcome'
+import { Provider } from 'react-redux'
+import { store } from 'src/redux/store'
+import Routes from './routes'
 
-const App = props => (
-  <React.Fragment>
-    <NavBar />
-    <Route path="/" component={Welcome} />
-  </React.Fragment>
+// import {
+//     BrowserRouter as Router
+// } from "react-router-dom";
+
+const App = () => (
+  <Provider store={store}>
+    <Routes />
+  </Provider>
 )
 
 export default App

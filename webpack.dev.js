@@ -7,6 +7,7 @@ const webpackCommonConfig = require('./webpack.common.js');
 module.exports = merge( webpackCommonConfig, {
   devServer: {
     contentBase: 'src',
+    historyApiFallback: true
   },
   mode: 'development',
   output: {
