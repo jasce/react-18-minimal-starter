@@ -1,4 +1,4 @@
-# React 18, React Router v6, Webpack 5 Minimal Starter
+# React v18, React Router v6, Webpack v5 Minimal Starter
 [![Build Status](https://travis-ci.org/jasce/react16-minimal-starter.svg?branch=master)](https://travis-ci.org/jasce/react16-minimal-starter)
 
 
