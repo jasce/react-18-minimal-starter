@@ -1,6 +1,6 @@
-import React, { Fragment, Component } from 'react'
-import { Route, Switch, Redirect, withRouter } from 'react-router'
-import { connect } from 'react-redux'
+import React, { useEffect } from 'react'
+import { Route, Routes, Navigate } from 'react-router'
+import { useSelector } from 'react-redux'
 import NavBar from 'src/components/navbar'
 import Notification from 'src/components/notification'
 import Signup from 'src/pages/signup'
@@ -8,72 +8,55 @@ import About from 'src/pages/about'
 import Welcome from 'src/pages/welcome'
 import Login from 'src/pages/login'
 import Logout from 'src/pages/logout'
-import PrivateRotue from 'src/hoc/private-route'
-
-import { BrowserRouter as Router } from 'react-router-dom'
+import usePrivateRoute from 'src/hooks/usePrivateRoute'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom';
 
 import { __fetchService } from 'src/helpers/fetch-service'
 
-const createRedirect = to => () => <Redirect to={to} />
+function RoutesManager() {
+  const dispatch = useDispatch()
+  let navigate = useNavigate()
 
-class Routes extends Component {
-  componentDidMount() {
+  let {isLoggedIn, show, message} = useSelector(({auth, notification}) => ({
+    isLoggedIn: auth.isLoggedIn,
+    show: notification.show,
+    message: notification.message
+  }))
+
+  useEffect(() => {
     const token = localStorage.getItem('token')
     if (token) {
-      this.props.dispatch({ type: 'LOGIN', payload: token })
+      dispatch({ type: 'LOGIN', payload: token })
     }
-  }
+  }, [])
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.isLoggedIn !== this.props.isLoggedIn) {
-      this.props.history && this.props.history.push('/')
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate && navigate("/welcome", { replace: true });
     }
-  }
-
-  render() {
-    const { show, message, isLoggedIn } = this.props
-    return (
-      <Router>
-        <Fragment>
-          <Notification show={show} message={message} />
-          <NavBar isLoggedIn={isLoggedIn} />
-          <Switch>
-            <PrivateRotue
-              path="/about"
-              component={About}
-              isLoggedIn={isLoggedIn}
-            />
-            <PrivateRotue
-              path="/welcome"
-              component={Welcome}
-              isLoggedIn={isLoggedIn}
-            />
-            {isLoggedIn ? (
-              <Route path="/logout" component={Logout} />
-            ) : (
-              <div>
-                <Route path="/signup" component={Signup} />
-                <Route path="/login" component={Login} />
-              </div>
-            )}
-          </Switch>
-        </Fragment>
-      </Router>
-    )
-  }
+  }, [isLoggedIn])
+  return (
+    <>
+      <Notification show={show} message={message} />
+      <NavBar isLoggedIn={isLoggedIn} />
+      <Routes>
+        <Route path="/" element={usePrivateRoute()} >
+          <Route exact path="/about" element={<About />} />
+          <Route exact path="/welcome" element={<Welcome />} />
+        </Route>
+        {isLoggedIn ? (
+          <Route path="/logout" element={<Logout />} />
+        ) : (
+          <>
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/login" element={<Login />} />
+          </>
+        )}
+      </Routes>
+    </>
+  )
 }
 
-const mapStateToProps = state => {
-  const { show, message } = state.notification
-  const { isLoggedIn, token } = state.auth
-  return {
-    show,
-    message,
-    isLoggedIn,
-    token
-  }
-}
-export default connect(
-  mapStateToProps,
-  null
-)(withRouter(Routes))
+export default RoutesManager

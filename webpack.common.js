@@ -50,7 +50,6 @@ module.exports = {
     hints: false,
   },
   plugins: [
-    new webpack.optimize.OccurrenceOrderPlugin(),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'src/index.html')
     })

@@ -1,12 +1,12 @@
 const path = require('path');
 const webpack = require('webpack');
-const merge = require('webpack-merge');
+const {merge} = require('webpack-merge');
 
 const webpackCommonConfig = require('./webpack.common.js');
 
 module.exports = merge( webpackCommonConfig, {
   devServer: {
-    contentBase: 'src',
+    static: 'src',
     historyApiFallback: true
   },
   mode: 'development',
